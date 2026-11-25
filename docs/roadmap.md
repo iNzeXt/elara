@@ -64,6 +64,10 @@ Done when a song can be built, edited, undone and saved/loaded from the CLI.
 - [x] MIDI import/export with `elara-cli import`/`export`, tested by round trip
   - [x] Played velocities as a dynamic per measure, accents and ghost notes (ADR-0045)
 - [x] `elara-cli import <file> --json` snapshot tests per corpus file
+- [ ] Export as MusicXML… and Export as MIDI… in the app, beside Export as PDF…,
+      telling what the format leaves out (`docs/release-review.md`)
+- [ ] Import warnings in the app: what opening a file approximated or dropped,
+      shown with that document (`docs/release-review.md`)
 
 ## Milestone 3 - Notation engine (`elara_notation`)  -> usable as a viewer
 
@@ -185,6 +189,8 @@ Done when a song can be built, edited, undone and saved/loaded from the CLI.
 - [x] Real-time playback through the built-in synthesizer, `elara-cli play` (ADR-0019)
 - [x] Transport, playback cursor and click-to-seek in the app, `elara-cli render --cursor-at`
   and `--time-at`
+- [ ] Playback follows the output device when it restarts at another sample rate:
+      reproduce first (`docs/release-review.md`)
 
 ## Milestone 5 - Editor
 
@@ -256,4 +262,25 @@ Done when a song can be built, edited, undone and saved/loaded from the CLI.
         desktop entry, drawn from its SVG at build time (ADR-0064)
   - [x] An MSI installer (Windows) and an AppImage (Linux), built and
         smoke-tested by CI with `elara.py package --installers` (ADR-0065)
+- [ ] Packages built with the vcpkg that CI tests, at the manifest's baseline
+      (`docs/release-review.md`)
+- [ ] The importers and `elara-cli` run under ASan and UBSan over the test corpus
+      in CI (`docs/release-review.md`)
 - [ ] Release automation and 1.0
+
+## After 1.0 - Performance
+
+From `docs/optimization-study.md`, smallest and surest first. Each task measures
+its effect and keeps the complete path it shortcuts to compare against.
+
+- [ ] Counters of sequences, layouts, rasters and bytes per edit, to measure the
+      tasks below
+- [ ] An SFZ sample decoded in stereo freed as soon as it is made mono (H05)
+- [ ] One sequence built at a time after edits, only the latest edit waiting (H02)
+- [ ] Commands that move a shared measure instead of copying it, so the history
+      shares measures with the song (H10, H11)
+- [ ] Edits of the mix, credits, chord symbols and beat text need no new sequence;
+      debug builds check that it would have been equal (H01)
+- [ ] The player's events per track prepared on the sequencing worker instead of
+      the interface thread (H03)
+- [ ] Export as PDF off the interface thread (H06)
